@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Tree Diagram - Final Project</title>
+
+    <style>
+	
+	.node {
+		cursor: pointer;
+	}
+
+	.node circle {
+	  stroke-width: 3.6px;
+	}
+
+	.node text {
+	  font: 12px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	}
+
+	.link {
+	  fill: none;
+	  stroke: rgb(220, 217, 217);
+	  stroke-width: 1.4px;
+	}
+	
+    </style>
+
+  </head>
+
+  <body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+	
+<script>
+
+var treeData = 
+[{"name": "Genre", "parent": "null", "value": 15, "type": "grey", "_children": [{"name": "Pop", "parent": "root", "type": "orange", "value": 9, "_children": [{"name": "Australian Pop", "parent": "pop", "value": 7.5, "type": "orange", "_children": [{"name": "Dance Monkey (Tones and I)", "parent": "Australian Pop", "value": 6, "type": "orange", "url": "https://www.youtube.com/watch?v=q0hyYWKXF0Q"}, {"name": "Somebody That I Used To Know (Gotye)", "parent": "Australian Pop", "value": 6, "type": "orange", "url": "https://www.youtube.com/watch?v=8UVNT4wvIGY"}, {"name": "Don't Dream It's Over (Crowded House)", "parent": "Australian Pop", "value": 6, "type": "orange", "url": "https://www.youtube.com/watch?v=J9gKyRmic20"}]}, {"name": "American Pop", "parent": "pop", "value": 7.5, "type": "orange", "_children": [{"name": "Memories (Maroon 5)", "parent": "American Pop", "value": 6, "type": "orange", "url": "https://www.youtube.com/watch?v=SlPhMPnQ58k"}, {"name": "Shape Of You (Ed Shreeran)", "parent": "American Pop", "value": 6, "type": "orange", "url": "https://www.youtube.com/watch?v=JGwWNGJdvx8"}, {"name": "Someone You Loved (Lewis Capaldi)", "parent": "American Pop", "value": 6, "type": "orange", "url": "https://www.youtube.com/watch?v=zABLecsR5UE"}]}, {"name": "Electro Pop", "parent": "pop", "value": 7.5, "type": "orange", "_children": [{"name": "Something Just Like This (Chainsmokers)", "parent": "Electro Pop", "value": 6, "type": "orange", "url": "https://www.youtube.com/watch?v=FM7MFYoylVs"}, {"name": "Bad Guy (Billie Eilish)", "parent": "Electro Pop", "value": 6, "type": "orange", "url": "https://www.youtube.com/watch?v=DyDfgMOUjCI"}, {"name": "Euphoria (Loreen)", "parent": "Electro Pop", "value": 6, "type": "orange", "url": "https://www.youtube.com/watch?v=bcnWysA9gxo"}]}]}, {"name": "Rock", "parent": "root", "type": "red", "value": 9, "_children": [{"name": "Album Rock", "parent": "rock", "value": 7.5, "type": "red", "_children": [{"name": "Hotel California (Eagles)", "parent": "Album Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=811QZGDysx0"}, {"name": "Highway To Hell (AC/DC)", "parent": "Album Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=l482T0yNkeo"}, {"name": "Every Breath You Take (The Police)", "parent": "Album Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=OMOGaugKpzs"}]}, {"name": "Modern Rock", "parent": "rock", "value": 7.5, "type": "red", "_children": [{"name": "Believer (Imagine Dragons)", "parent": "Modern Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=7wtfhZwyrcc"}, {"name": "Thunder (Imagine Dragons)", "parent": "Modern Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=fKopy74weus"}, {"name": "Stressed Out (Twenty One Pilots)", "parent": "Modern Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=pXRviuL6vMY"}]}, {"name": "Blues Rock", "parent": "rock", "value": 7.5, "type": "red", "_children": [{"name": "Johnny B. Goode (Chuck Berry)", "parent": "Blues Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=Uf4rxCB4lys"}, {"name": "Me and Bobby McGee (Janis Joplin)", "parent": "Blues Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=WXV_QjenbDw"}, {"name": "Smooth feat. Rob Thomas (Santana)", "parent": "Blues Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=6Whgn_iE5uc"}]}, {"name": "Alternative Rock", "parent": "rock", "value": 7.5, "type": "red", "_children": [{"name": "Creep (Radiohead)", "parent": "Alternative Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=XFkzRNyygfk"}, {"name": "Under the Bridge (Red Hot Chilli Peppers)", "parent": "Alternative Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=GLvohMXgcBo"}, {"name": "Losing My Religion (R.E.M.)", "parent": "Alternative Rock", "value": 6, "type": "red", "url": "https://www.youtube.com/watch?v=xwtdhWltSIg"}]}]}, {"name": "Metal", "parent": "root", "type": "black", "value": 9, "_children": [{"name": "Glam Metal", "parent": "metal", "value": 7.5, "type": "black", "_children": [{"name": "Livin' On A Prayer (Bon Jovi)", "parent": "Glam Metal", "value": 6, "type": "black", "url": "https://www.youtube.com/watch?v=lDK9QqIzhwk"}, {"name": "November Rain (Guns N' Roses)", "parent": "Glam Metal", "value": 6, "type": "black", "url": "https://www.youtube.com/watch?v=FQV7sGEtq7E"}, {"name": "Knockin' On Heaven's Door (Guns N' Roses)", "parent": "Glam Metal", "value": 6, "type": "black", "url": "https://www.youtube.com/watch?v=f8OHybVhQwc"}]}, {"name": "Alternative Metal", "parent": "metal", "value": 7.5, "type": "black", "_children": [{"name": "In the End (Linkin Park)", "parent": "Alternative Metal", "value": 6, "type": "black", "url": "https://www.youtube.com/watch?v=eVTXPUF4Oz4"}, {"name": "Numb (Linkin Park)", "parent": "Alternative Metal", "value": 6, "type": "black", "url": "https://www.youtube.com/watch?v=kXYiU_JCYtU"}, {"name": "Chop Suey! (System Of A Down)", "parent": "Alternative Metal", "value": 6, "type": "black", "url": "https://www.youtube.com/watch?v=CSvFpBOe8eY"}]}]}, {"name": "Jazz", "parent": "root", "type": "royalblue", "value": 9, "_children": [{"name": "Latin Jazz", "parent": "jazz", "value": 7.5, "type": "royalblue", "_children": [{"name": "Chan Chan (Buena Vista Social Club)", "parent": "Latin Jazz", "value": 6, "type": "royalblue", "url": "https://www.youtube.com/watch?v=o5cELP06Mik"}, {"name": "Corteguay (Ant\u00f4nio Carlos Jobim)", "parent": "Latin Jazz", "value": 6, "type": "royalblue", "url": "https://www.youtube.com/watch?v=5SLKbKIWfRs"}, {"name": "Spain (Chick Corea)", "parent": "Latin Jazz", "value": 6, "type": "royalblue", "url": "https://www.youtube.com/watch?v=sEhQTjgoTdU"}]}, {"name": "Acid Jazz", "parent": "jazz", "value": 7.5, "type": "royalblue", "_children": [{"name": "Virtual Insanity - Remastered (Jamiroquai)", "parent": "Acid Jazz", "value": 6, "type": "royalblue", "url": "https://www.youtube.com/watch?v=GieQq3eWSnE"}, {"name": "Never Stop (The Brand New Heavies)", "parent": "Acid Jazz", "value": 6, "type": "royalblue", "url": "https://www.youtube.com/watch?v=iyRPfK-U0Oc"}, {"name": "The Ghetto (Jestofunk)", "parent": "Acid Jazz", "value": 6, "type": "royalblue", "url": "https://www.youtube.com/watch?v=NfTZR21KZJo"}]}, {"name": "Contemporary Vocal Jazz", "parent": "jazz", "value": 7.5, "type": "royalblue", "_children": [{"name": "Liquid Spirit - Claptone Remix (Gregory Porter)", "parent": "Contemporary Vocal Jazz", "value": 6, "type": "royalblue", "url": "https://www.youtube.com/watch?v=e_YvqX-2yOI"}, {"name": "So What (Miles Davis)", "parent": "Contemporary Vocal Jazz", "value": 6, "type": "royalblue", "url": "https://www.youtube.com/watch?v=ylXk1LBvIqU"}, {"name": "Just the Two of Us (Bill Withers)", "parent": "Contemporary Vocal Jazz", "value": 6, "type": "royalblue", "url": "https://www.youtube.com/watch?v=jEy6MGu3bIA"}]}]}, {"name": "Country", "parent": "root", "type": "yellowgreen", "value": 9, "_children": [{"name": "Arkansas Country", "parent": "country", "value": 7.5, "type": "yellowgreen", "_children": [{"name": "Hurt (Johnny Cash)", "parent": "Arkansas Country", "value": 6, "type": "yellowgreen", "url": "https://www.youtube.com/watch?v=8AHCfZTRGiI"}, {"name": "I Walk the Line (Johnny Cash)", "parent": "Arkansas Country", "value": 6, "type": "yellowgreen", "url": "https://www.youtube.com/watch?v=J-6fW66IUY4"}, {"name": "Ring of Fire (Johnny Cash)", "parent": "Arkansas Country", "value": 6, "type": "yellowgreen", "url": "https://www.youtube.com/watch?v=1WaV2x8GXj0"}]}, {"name": "Contemporary Country", "parent": "country", "value": 7.5, "type": "yellowgreen", "_children": [{"name": "Tennessee Whiskey (Chris Stapleton)", "parent": "Contemporary Country", "value": 6, "type": "yellowgreen", "url": "https://www.youtube.com/watch?v=4zAThXFOy2c"}, {"name": "Need You Now (Lady Antebellum)", "parent": "Contemporary Country", "value": 6, "type": "yellowgreen", "url": "https://www.youtube.com/watch?v=eM213aMKTHg"}, {"name": "Hangman (Marty Stuart & Johnny Cash)", "parent": "Contemporary Country", "value": 6, "type": "yellowgreen", "url": "https://www.youtube.com/watch?v=nhdCwvfRJQw"}]}, {"name": "Classic Country Pop", "parent": "country", "value": 7.5, "type": "yellowgreen", "_children": [{"name": "9 to 5 (Dolly Parton)", "parent": "Classic Country Pop", "value": 6, "type": "yellowgreen", "url": "https://www.youtube.com/watch?v=UbxUSsFXYo4"}, {"name": "Jolene (Dolly Parton)", "parent": "Classic Country Pop", "value": 6, "type": "yellowgreen", "url": "https://www.youtube.com/watch?v=Ixrje2rXLMA"}, {"name": "Always On My Mind (Willie Nelson)", "parent": "Classic Country Pop", "value": 6, "type": "yellowgreen", "url": "https://www.youtube.com/watch?v=R7f189Z0v0Y"}]}]}]}];
+
+var margin = {top: 20, right: 120, bottom: 20, left: 220},
+	width = 2000 - margin.right - margin.left,
+	height = 900 - margin.top - margin.bottom;
+	
+var i = 0,
+	duration = 730,
+	root;
+
+var tree = d3.layout.tree()
+	.size([height, width]);
+
+var diagonal = d3.svg.diagonal()
+	.projection(function(d) { return [d.y, d.x]; });
+
+var svg = d3.select("body").append("svg")
+	.attr("width", width + margin.right + margin.left)
+	.attr("height", height + margin.top + margin.bottom)
+  .append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+root = treeData[0];
+root.x0 = height / 2;
+root.y0 = 0;
+  
+update(root);
+
+d3.select(self.frameElement).style("height", "500px");
+
+function update(source) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+	  links = tree.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 380; });
+
+  // Update the nodes…
+  var node = svg.selectAll("g.node")
+	  .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+  // Enter any new nodes at the parent's previous position.
+  var nodeEnter = node.enter().append("g")
+	  .attr("class", "node")
+	  .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+	  .on("click", click);
+
+  nodeEnter.append("circle")
+	  .attr("r", 1e-6)
+	  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+  nodeEnter.append("text")
+	  .attr("x", function(d) { return d.children || d._children ? -20 : 20; })
+	  .attr("dy", ".35em")
+	  .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+	  .text(function(d) { return d.name; })
+	  .style("fill-opacity", 1e-6);
+
+  // Transition nodes to their new position.
+  var nodeUpdate = node.transition()
+	  .duration(duration)
+	  .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+  nodeUpdate.select("circle")
+	  .attr("r", d => d.value)
+      .attr("stroke", d => d.type)
+	  .style("fill", function(d) { return d._children ? d.type : "#fff"; });
+
+  nodeUpdate.select("text")
+	  .style("fill-opacity", 1);
+
+  // Transition exiting nodes to the parent's new position.
+  var nodeExit = node.exit().transition()
+	  .duration(duration)
+	  .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+	  .remove();
+
+  nodeExit.select("circle")
+	  .attr("r", 1e-6);
+
+  nodeExit.select("text")
+	  .style("fill-opacity", 1e-6);
+
+  // Update the links…
+  var link = svg.selectAll("path.link")
+	  .data(links, function(d) { return d.target.id; });
+
+  // Enter any new links at the parent's previous position.
+  link.enter().insert("path", "g")
+	  .attr("class", "link")
+	  .attr("d", function(d) {
+		var o = {x: source.x0, y: source.y0};
+		return diagonal({source: o, target: o});
+	  });
+
+  // Transition links to their new position.
+  link.transition()
+	  .duration(duration)
+	  .attr("d", diagonal);
+
+  // Transition exiting nodes to the parent's new position.
+  link.exit().transition()
+	  .duration(duration)
+	  .attr("d", function(d) {
+		var o = {x: source.x, y: source.y};
+		return diagonal({source: o, target: o});
+	  })
+	  .remove();
+
+  // Stash the old positions for transition.
+  nodes.forEach(function(d) {
+	d.x0 = d.x;
+	d.y0 = d.y;
+  });
+}
+
+// Toggle children on click.
+function click(d) {
+  // I am clicking the leaf nodes
+  if (d.depth == 3) {
+    window.open(d.url);
+  }
+  else{
+    if (d.children) {
+        d._children = d.children;
+        d.children = null;
+    } else {
+        d.children = d._children;
+        d._children = null;
+    }
+  }
+  update(d);
+}
+
+</script>
+	
+  </body>
+</html>
